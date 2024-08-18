@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Compile",
+            "type": "node",
+            "request": "attach",
+            "preLaunchTask": "compile"
+        }
+    ]   
+}

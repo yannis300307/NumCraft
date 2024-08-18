@@ -1,0 +1,7 @@
+{
+    "makefile.configureOnOpen": true,
+    "files.associations": {
+        "housetexture.h": "c",
+        "housemodel.h": "c"
+    }
+}
