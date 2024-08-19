@@ -20,8 +20,6 @@ S3L_Model3D cubeModel;
 S3L_Scene scene;
 
 
-
-
 void draw_pixel(S3L_PixelInfo *pixel) {
   EADK::Display::pushRectUniform(EADK::Rect{pixel->x, pixel->y, 1, 1}, Black);
 }
