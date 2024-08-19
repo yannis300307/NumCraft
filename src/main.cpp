@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 #define S3L_PIXEL_FUNCTION draw_pixel
-#define S3L_RESOLUTION_X 320
-#define S3L_RESOLUTION_Y 240
+#define S3L_RESOLUTION_X 160
+#define S3L_RESOLUTION_Y 120
 
 #include "small3dlib.h"
 
@@ -19,13 +19,26 @@ S3L_Index cubeTriangles[] = { S3L_CUBE_TRIANGLES };
 S3L_Model3D cubeModel;
 S3L_Scene scene;
 
+uint16_t *frame_buffer[S3L_RESOLUTION_Y][S3L_RESOLUTION_X];
+
 
 void draw_pixel(S3L_PixelInfo *pixel) {
-  EADK::Display::pushRectUniform(EADK::Rect{pixel->x, pixel->y, 1, 1}, Black);
+  frame_buffer[pixel->y][pixel->x] = 0x0;
+}
+
+void clear_frame_buffer(uint16_t *color) {
+  for (int x=0; x<S3L_RESOLUTION_X; x++) {
+    for (int y=0; x<S3L_RESOLUTION_Y; y++) {
+      frame_buffer[y][x] = color;
+    }
+  }
+}
+
+void show_frame_buffer() {
+  eadk_display_push_rect({0, 0, S3L_RESOLUTION_X, S3L_RESOLUTION_Y})
 }
 
 int main(int argc, char * argv[]) {
-
   S3L_model3DInit(
     cubeVertices,
     S3L_CUBE_VERTEX_COUNT,
@@ -52,8 +65,6 @@ int main(int argc, char * argv[]) {
       return 0;
     }
 
-    EADK::Display::pushRectUniform(EADK::Screen::Rect, Yellow);
-
     S3L_newFrame();
     S3L_drawScene(scene);
 
@@ -61,7 +72,7 @@ int main(int argc, char * argv[]) {
 
     current_timer = eadk_timing_millis();
 
-    delta = (current_timer-last_timer);
+    delta = (float)(current_timer-last_timer)/1000.;
 
     if (delta == 0) {delta = 0.00001;} // yeah ...
 
@@ -89,5 +100,6 @@ int main(int argc, char * argv[]) {
   }
 
   EADK::Display::pushRectUniform(EADK::Screen::Rect, LightBlue);
+
   return 0;
 }
