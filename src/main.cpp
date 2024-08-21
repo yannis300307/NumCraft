@@ -1,11 +1,13 @@
-#include "display.h"
-#include "eadkpp.h"
-#include "palette.h"
 #include <stdio.h>
+#include <malloc.h>
+
+extern "C" {
+  #include <eadk.h>
+}
 
 #define S3L_PIXEL_FUNCTION draw_pixel
-#define S3L_RESOLUTION_X 160
-#define S3L_RESOLUTION_Y 120
+#define S3L_RESOLUTION_X 340
+#define S3L_RESOLUTION_Y 240
 
 #include "small3dlib.h"
 
@@ -19,23 +21,10 @@ S3L_Index cubeTriangles[] = { S3L_CUBE_TRIANGLES };
 S3L_Model3D cubeModel;
 S3L_Scene scene;
 
-uint16_t *frame_buffer[S3L_RESOLUTION_Y][S3L_RESOLUTION_X];
-
 
 void draw_pixel(S3L_PixelInfo *pixel) {
-  frame_buffer[pixel->y][pixel->x] = 0x0;
-}
-
-void clear_frame_buffer(uint16_t *color) {
-  for (int x=0; x<S3L_RESOLUTION_X; x++) {
-    for (int y=0; x<S3L_RESOLUTION_Y; y++) {
-      frame_buffer[y][x] = color;
-    }
-  }
-}
-
-void show_frame_buffer() {
-  eadk_display_push_rect({0, 0, S3L_RESOLUTION_X, S3L_RESOLUTION_Y})
+  eadk_color_t color = 0x0;
+  eadk_display_push_rect({(uint16_t)(pixel->x), (uint16_t)(pixel->y), 1, 1}, &color);
 }
 
 int main(int argc, char * argv[]) {
@@ -44,7 +33,7 @@ int main(int argc, char * argv[]) {
     S3L_CUBE_VERTEX_COUNT,
     cubeTriangles,
     S3L_CUBE_TRIANGLE_COUNT,
-    &cubeModel); 
+    &cubeModel);
 
 
   S3L_sceneInit( // Initialize the scene we'll be rendering.
@@ -60,8 +49,8 @@ int main(int argc, char * argv[]) {
   float delta = 0.;
 
   while (1) {
-    EADK::Keyboard::State keyboardState = EADK::Keyboard::scan();
-    if (keyboardState.keyDown(EADK::Keyboard::Key::Home)) {
+    eadk_keyboard_state_t keyboardState = eadk_keyboard_scan();
+    if (eadk_keyboard_key_down(keyboardState, eadk_key_home)) {
       return 0;
     }
 
@@ -84,7 +73,7 @@ int main(int argc, char * argv[]) {
     pos.x = 10;
     pos.y = 10;
 
-    eadk_display_draw_string(count_str, pos, false, Black, White);
+    eadk_display_draw_string(count_str, pos, false, 0x0000, 0xFFFF);
 
     //scene.camera.transform.rotation.y += 1;
     scene.models[0].transform.rotation.y += 10;
@@ -94,12 +83,10 @@ int main(int argc, char * argv[]) {
 
     eadk_display_wait_for_vblank();
     
-    EADK::Timing::msleep(500);
+    eadk_timing_msleep(100);
     i++;
     last_timer = current_timer;
   }
-
-  EADK::Display::pushRectUniform(EADK::Screen::Rect, LightBlue);
 
   return 0;
 }
