@@ -54,6 +54,8 @@ int main(int argc, char * argv[]) {
       return 0;
     }
 
+    eadk_display_push_rect_uniform(eadk_screen_rect, 0xFFFF);
+
     S3L_newFrame();
     S3L_drawScene(scene);
 
