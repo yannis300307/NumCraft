@@ -11,7 +11,10 @@ $(addprefix $(BUILD_DIR)/,$(addsuffix .o,$(basename $(1))))
 endef
 
 src = $(addprefix src/,\
-  main.cpp\
+  main.cpp,\
+  renderer.cpp,\
+  core.cpp,\
+  controls.cpp\
 )
 
 CPPFLAGS = -std=c++11 -fno-exceptions
@@ -54,7 +57,7 @@ $(addprefix $(BUILD_DIR)/,%.o): %.cpp | $(BUILD_DIR)
 	@echo "CXX     $^"
 	$(Q) $(CXX) $(CPPFLAGS) $(SFLAGS) -c $^ -o $@
 
-$(BUILD_DIR)/icon.o: src/icon.png
+$(BUILD_DIR)/icon.o: assets/icon.png
 	@echo "ICON    $<"
 	$(Q) $(NWLINK) png-icon-o $< $@
 
