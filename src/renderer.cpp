@@ -1,14 +1,26 @@
 #include "renderer.hpp"
 
+#define S3L_PIXEL_FUNCTION draw_pixel
+#define S3L_RESOLUTION_X 340
+#define S3L_RESOLUTION_Y 240
+
+#include "libs/small3dlib.h"
+
+S3L_Unit cubeVertices[] = { S3L_CUBE_VERTICES(S3L_F) };
+S3L_Index cubeTriangles[] = { S3L_CUBE_TRIANGLES };
+
+S3L_Model3D cubeModel;
+S3L_Scene scene;
 
 void draw_pixel(S3L_PixelInfo *pixel) {
   eadk_color_t color = 0x0;
   eadk_display_push_rect({(uint16_t)(pixel->x), (uint16_t)(pixel->y), 1, 1}, &color);
 }
 
-Renderer::Renderer(Core* core)
+
+Renderer::Renderer()
 {
-    this->core = core;
+    scene = S3L_Scene();
     S3L_model3DInit(
         cubeVertices,
         S3L_CUBE_VERTEX_COUNT,

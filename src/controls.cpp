@@ -1,5 +1,9 @@
 #include "controls.hpp"
 
+#include "eadk.h"
+
+#include "core.hpp"
+
 
 Controls::Controls(Core *core)
 {

@@ -11,8 +11,8 @@ void Core::quit() {
 void Core::loop() {
     while (this->running)
     {
-       this->renderer->update();
-
+       this->renderer.update();
+       eadk_timing_msleep(100);
     }
     
 }

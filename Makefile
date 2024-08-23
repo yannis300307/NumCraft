@@ -11,10 +11,10 @@ $(addprefix $(BUILD_DIR)/,$(addsuffix .o,$(basename $(1))))
 endef
 
 src = $(addprefix src/,\
-  main.cpp,\
-  renderer.cpp,\
   core.cpp,\
-  controls.cpp\
+  renderer.cpp,\
+  main.cpp,\
+  controls.cpp;\
 )
 
 CPPFLAGS = -std=c++11 -fno-exceptions
