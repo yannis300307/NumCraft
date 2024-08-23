@@ -1,8 +1,0 @@
-{
-    "makefile.configureOnOpen": true,
-    "files.associations": {
-        "housetexture.h": "c",
-        "housemodel.h": "c"
-    },
-    "C_Cpp.default.compilerPath": ""
-}
