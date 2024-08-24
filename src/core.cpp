@@ -12,7 +12,7 @@ void Core::loop() {
     while (this->running)
     {
        this->renderer.update();
-       eadk_timing_msleep(100);
+       eadk_timing_msleep(30);
     }
     
 }
