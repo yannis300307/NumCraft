@@ -11,7 +11,7 @@
 S3L_Unit cubeVertices[] = { S3L_CUBE_VERTICES(S3L_F) };
 S3L_Index cubeTriangles[] = { S3L_CUBE_TRIANGLES };
 S3L_Unit cubeUvs[] = { S3L_CUBE_TEXCOORDS(16) };
-S3L_Index cubeuvIndices[] = { 0,1,2,3,4,5,6,7,8,9,10,11 };
+S3L_Index cubeuvIndices[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35 };
 
 S3L_Model3D cubeModel;
 S3L_Scene scene;
@@ -63,7 +63,7 @@ Renderer::Renderer()
 }
 
 void Renderer::update() {
-    //eadk_display_push_rect_uniform(eadk_screen_rect, 0xFFFF);
+    eadk_display_push_rect_uniform(eadk_screen_rect, 0xFFFF);
 
     S3L_newFrame();
     S3L_drawScene(scene);
