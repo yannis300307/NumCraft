@@ -1,9 +1,9 @@
 #include "renderer.hpp"
 #include "texture_reader.hpp"
-#include "textures/debug.h"
+#include "textures/tileset.h"
 
 #define S3L_PIXEL_FUNCTION draw_pixel
-#define S3L_RESOLUTION_X 340
+#define S3L_RESOLUTION_X 320
 #define S3L_RESOLUTION_Y 240
 
 #include "libs/small3dlib.h"
