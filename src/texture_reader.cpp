@@ -1,16 +1,10 @@
 #include "texture_reader.hpp"
 
 
-void sampleTexture(const uint8_t *tex, int32_t u, int32_t v, uint8_t *r, uint8_t *g, uint8_t *b)
+void sampleTexture(const uint16_t *tex, int32_t u, int32_t v, uint16_t *color)
 {
-  u = u % TEXTURE_W;
+  u = u % TEXTURE_W+16;
   v = v % TEXTURE_H;
 
-  const uint8_t *t = tex + (v * TEXTURE_W + u) * 3;
-
-  *r = *t;
-  t++;
-  *g = *t;
-  t++;
-  *b = *t;
+  *color = *(tex + (v * TEXTURE_W + u));
 }
