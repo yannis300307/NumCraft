@@ -12,6 +12,7 @@ void Core::loop() {
     while (this->running)
     {
        this->renderer.update();
+       this->controls.handle();
        eadk_timing_msleep(30);
     }
     

@@ -53,7 +53,7 @@ void draw_pixel(S3L_PixelInfo *pixel)
     uint16_t color;
     sampleTexture(texture, uv[0], uv[1], &color);
 
-    eadk_display_push_rect({(uint16_t)(pixel->x), (uint16_t)(pixel->y), 1, 1}, &color);
+    eadk_display_push_rect({(uint16_t)(pixel->x), (uint16_t)(pixel->y), 1, 1}, &color); // TODO : Optimise this horrible thing!!! Make a line by line rendering
 
     // Set the z bit map buffer.
     z_buffer_bit_map.set(pixel->x + pixel->y * S3L_RESOLUTION_X);
@@ -97,6 +97,30 @@ void fill_void_space(eadk_color_t color)
     }
 }
 
+void Renderer::move_camera(int x, int y, int z) {
+    scene.camera.transform.translation.x += x;
+    scene.camera.transform.translation.y += y;
+    scene.camera.transform.translation.z += z;
+}
+
+void Renderer::rotate_camera(int x, int y, int z) {
+    scene.camera.transform.rotation.x += x;
+    scene.camera.transform.rotation.y += y;
+    scene.camera.transform.rotation.z += z;
+}
+
+void Renderer::set_camera_pos(int x, int y, int z) {
+    scene.camera.transform.translation.x = x;
+    scene.camera.transform.translation.y = y;
+    scene.camera.transform.translation.z = z;
+}
+
+void Renderer::set_camera_rotation(int x, int y, int z) {
+    scene.camera.transform.rotation.x = x;
+    scene.camera.transform.rotation.y = y;
+    scene.camera.transform.rotation.z = z;
+}
+
 void Renderer::update()
 {
     // eadk_display_push_rect_uniform(eadk_screen_rect, 0xFFFF);
@@ -107,11 +131,11 @@ void Renderer::update()
     
     fill_void_space(eadk_color_white);
 
-    // scene.camera.transform.rotation.y += 1;
+    /* scene.camera.transform.rotation.y += 1;
     scene.models[0].transform.rotation.y += 10;
     scene.models[0].transform.rotation.x += 4;
     scene.models[0].transform.translation.x = S3L_sin(imageCount * 4);
-    scene.models[0].transform.translation.y = S3L_sin(imageCount * 2) / 2;
+    scene.models[0].transform.translation.y = S3L_sin(imageCount * 2) / 2;*/
 
     eadk_display_wait_for_vblank();
 
