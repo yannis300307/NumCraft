@@ -9,7 +9,7 @@ private:
     Core *core;
 public:
     Controls (Core *core);
-    void handle();
+    void handle(int delta);
 };
 
 #endif

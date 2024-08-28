@@ -3,7 +3,7 @@
 
 void sampleTexture(const uint16_t *tex, int32_t u, int32_t v, uint16_t *color)
 {
-  u = u % TEXTURE_W+16;
+  u = u % TEXTURE_W+96;
   v = v % TEXTURE_H;
 
   *color = *(tex + (v * TEXTURE_W + u));

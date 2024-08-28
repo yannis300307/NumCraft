@@ -5,7 +5,7 @@
 #define S3L_PIXEL_FUNCTION draw_pixel
 #define S3L_RESOLUTION_X 320
 #define S3L_RESOLUTION_Y 240
-#define PIXEL_COUNT (S3L_RESOLUTION_X*S3L_RESOLUTION_Y)
+#define PIXEL_COUNT (S3L_RESOLUTION_X * S3L_RESOLUTION_Y)
 #define Z_BUFFER_BIT_MAP (S3L_RESOLUTION_X * S3L_RESOLUTION_Y / 8)
 
 #include "libs/small3dlib.h"
@@ -48,7 +48,6 @@ void draw_pixel(S3L_PixelInfo *pixel)
 
     uv[0] = S3L_interpolateBarycentric(uv0.x, uv1.x, uv2.x, pixel->barycentric);
     uv[1] = S3L_interpolateBarycentric(uv0.y, uv1.y, uv2.y, pixel->barycentric);
-
 
     uint16_t color;
     sampleTexture(texture, uv[0], uv[1], &color);
@@ -97,25 +96,55 @@ void fill_void_space(eadk_color_t color)
     }
 }
 
-void Renderer::move_camera(int x, int y, int z) {
+void Renderer::move_camera(int x, int y, int z)
+{
     scene.camera.transform.translation.x += x;
     scene.camera.transform.translation.y += y;
     scene.camera.transform.translation.z += z;
 }
 
-void Renderer::rotate_camera(int x, int y, int z) {
+void Renderer::move_camera_forward(int step)
+{
+
+    S3L_Vec4 camDirection;
+
+    S3L_vec4Init(&camDirection);
+
+    S3L_rotationToDirections(scene.camera.transform.rotation, S3L_F, &camDirection, 0, 0);
+
+    scene.camera.transform.translation.x += (camDirection.x * step) / S3L_F;
+    scene.camera.transform.translation.z += (camDirection.z * step) / S3L_F;
+}
+
+void Renderer::move_camera_sideway(int step)
+{
+
+    S3L_Vec4 camDirection;
+
+    S3L_vec4Init(&camDirection);
+
+    S3L_rotationToDirections(scene.camera.transform.rotation, S3L_F, 0, &camDirection, 0);
+
+    scene.camera.transform.translation.x += (camDirection.x * step) / S3L_F;
+    scene.camera.transform.translation.z += (camDirection.z * step) / S3L_F;
+}
+
+void Renderer::rotate_camera(int x, int y, int z)
+{
     scene.camera.transform.rotation.x += x;
     scene.camera.transform.rotation.y += y;
     scene.camera.transform.rotation.z += z;
 }
 
-void Renderer::set_camera_pos(int x, int y, int z) {
+void Renderer::set_camera_pos(int x, int y, int z)
+{
     scene.camera.transform.translation.x = x;
     scene.camera.transform.translation.y = y;
     scene.camera.transform.translation.z = z;
 }
 
-void Renderer::set_camera_rotation(int x, int y, int z) {
+void Renderer::set_camera_rotation(int x, int y, int z)
+{
     scene.camera.transform.rotation.x = x;
     scene.camera.transform.rotation.y = y;
     scene.camera.transform.rotation.z = z;
@@ -128,7 +157,7 @@ void Renderer::update()
     clear_z_buffer_bit_map();
     S3L_newFrame();
     S3L_drawScene(scene);
-    
+
     fill_void_space(eadk_color_white);
 
     /* scene.camera.transform.rotation.y += 1;
