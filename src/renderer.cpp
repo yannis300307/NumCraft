@@ -44,11 +44,16 @@ void clear_z_buffer_bit_map()
 void draw_pixel(S3L_PixelInfo *pixel)
 {
     /*Draw the pixel gived by the rasterizer.*/
+
+    int index = pixel->x + pixel->y * S3L_RESOLUTION_X;
+
     if (pixel->triangleID != previousTriangle)
     {
         S3L_getIndexedTriangleValues(pixel->triangleIndex, uvIndices, uvs, 2, &uv0, &uv1, &uv2);
         previousTriangle = pixel->triangleID;
     }
+
+    if (z_buffer_bit_map.test(index)) return;
 
     S3L_Unit uv[2];
 
@@ -74,7 +79,7 @@ void draw_pixel(S3L_PixelInfo *pixel)
     pixels_in_row_count += 1;
 
     // Set the z bit map buffer.
-    z_buffer_bit_map.set(pixel->x + pixel->y * S3L_RESOLUTION_X);
+    z_buffer_bit_map.set(index);
 }
 
 Renderer::Renderer()
