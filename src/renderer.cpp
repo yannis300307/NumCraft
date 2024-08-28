@@ -7,6 +7,8 @@
 #define S3L_RESOLUTION_Y 240
 #define PIXEL_COUNT (S3L_RESOLUTION_X * S3L_RESOLUTION_Y)
 #define Z_BUFFER_BIT_MAP (S3L_RESOLUTION_X * S3L_RESOLUTION_Y / 8)
+#define S3L_PERSPECTIVE_CORRECTION 1
+
 
 #include "libs/small3dlib.h"
 #include <bitset>
