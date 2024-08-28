@@ -23,7 +23,13 @@ S3L_Index cubeuvIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1
 S3L_Model3D cubeModel;
 S3L_Scene scene;
 
+// Used for caching
 uint32_t previousTriangle = -1;
+uint16_t last_pixel_x = S3L_RESOLUTION_X; // Must be an impossible value at initialisation
+uint16_t last_pixel_y = S3L_RESOLUTION_Y; // Same
+uint16_t pixels_in_row_count = 0;
+eadk_color_t row_pixel_buffer[S3L_RESOLUTION_X];
+
 S3L_Vec4 uv0, uv1, uv2;
 const uint16_t *texture = tilesetTexture;
 const S3L_Index *uvIndices = cubeuvIndices;
@@ -52,7 +58,20 @@ void draw_pixel(S3L_PixelInfo *pixel)
     uint16_t color;
     sampleTexture(texture, uv[0], uv[1], &color);
 
-    eadk_display_push_rect({(uint16_t)(pixel->x), (uint16_t)(pixel->y), 1, 1}, &color); // TODO : Optimise this horrible thing!!! Make a line by line rendering
+    uint16_t x = pixel->x;
+    uint16_t y = pixel->y;
+    uint16_t w = last_pixel_x - pixels_in_row_count + 1;
+
+    if (!(y == last_pixel_y && x == last_pixel_x + 1))
+    {
+        eadk_display_push_rect({w, last_pixel_y, pixels_in_row_count, 1}, row_pixel_buffer);
+        pixels_in_row_count = 0;
+    }
+
+    last_pixel_x = x;
+    last_pixel_y = y;
+    row_pixel_buffer[pixels_in_row_count] = color;
+    pixels_in_row_count += 1;
 
     // Set the z bit map buffer.
     z_buffer_bit_map.set(pixel->x + pixel->y * S3L_RESOLUTION_X);
