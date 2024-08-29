@@ -16,6 +16,7 @@ src = $(addprefix src/,\
   main.cpp,\
   controls.cpp,\
   texture_reader.cpp;\
+  chunk.cpp;\
 )
 
 CPPFLAGS = -std=c++11 -fno-exceptions
