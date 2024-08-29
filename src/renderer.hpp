@@ -1,5 +1,5 @@
-#ifndef renderer_hpp
-#define renderer_hpp
+#ifndef RENDERER_HPP
+#define RENDERER_HPP
 
 extern "C"
 {

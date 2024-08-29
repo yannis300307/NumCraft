@@ -21,7 +21,6 @@ void Core::loop() {
         // Update all the components
         this->renderer.update();
         this->controls.handle(delta);
-        //eadk_timing_msleep(30);
+        // eadk_timing_msleep(30);
     }
-    
 }

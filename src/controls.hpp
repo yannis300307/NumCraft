@@ -1,5 +1,5 @@
-#ifndef controls_hpp
-#define controls_hpp
+#ifndef CONTROLS_HPP
+#define CONTROLS_HPP
 
 class Core;
 

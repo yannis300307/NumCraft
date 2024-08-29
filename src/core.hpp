@@ -1,5 +1,5 @@
-#ifndef core_hpp
-#define core_hpp
+#ifndef CORE_HPP
+#define CORE_HPP
 
 #include "renderer.hpp"
 #include "controls.hpp"

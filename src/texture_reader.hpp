@@ -1,5 +1,5 @@
-#ifndef texture_reader_hpp
-#define texture_reader_hpp
+#ifndef TEXTURE_READER_HPP
+#define TEXTURE_READER_HPP
 
 #define TEXTURE_W 160
 #define TEXTURE_H 16
