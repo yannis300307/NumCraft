@@ -1,7 +1,7 @@
 #include "world.hpp"
 #include <malloc.h>
 
-bool World::load_chunks_around(int x, int y, int z, int view_distance)
+bool World::load_chunks_around(int x, int y, int z)
 {
     if (loaded_chunks == NULL || available_chunk_slots == NULL)
         return false;
@@ -22,20 +22,20 @@ bool World::load_chunks_around(int x, int y, int z, int view_distance)
             int y = chunk.get_pos_y();
             int z = chunk.get_pos_z();
 
-            available_chunk_slots[i] = !(chunk_pos_center_x - view_distance <= x && x >= chunk_pos_center_x + view_distance &&
-                                         chunk_pos_center_y - view_distance <= y && y >= chunk_pos_center_y + view_distance &&
-                                         chunk_pos_center_z - view_distance <= z && z >= chunk_pos_center_z + view_distance);
+            available_chunk_slots[i] = !(chunk_pos_center_x - current_view_distance <= x && x >= chunk_pos_center_x + current_view_distance &&
+                                         chunk_pos_center_y - current_view_distance <= y && y >= chunk_pos_center_y + current_view_distance &&
+                                         chunk_pos_center_z - current_view_distance <= z && z >= chunk_pos_center_z + current_view_distance);
         }
     }
 
     int i = 0;
 
     // A lot of big for loops! It simply iterate throw the chunks in the view distance
-    for (int chunk_x = chunk_pos_center_x - view_distance; chunk_x <= chunk_pos_center_x + view_distance; chunk_x++)
+    for (int chunk_x = chunk_pos_center_x - current_view_distance; chunk_x <= chunk_pos_center_x + current_view_distance; chunk_x++)
     {
-        for (int chunk_y = chunk_pos_center_y - view_distance; chunk_y <= chunk_pos_center_y + view_distance; chunk_y++)
+        for (int chunk_y = chunk_pos_center_y - current_view_distance; chunk_y <= chunk_pos_center_y + current_view_distance; chunk_y++)
         {
-            for (int chunk_z = chunk_pos_center_z - view_distance; chunk_z <= chunk_pos_center_z + view_distance; chunk_z++)
+            for (int chunk_z = chunk_pos_center_z - current_view_distance; chunk_z <= chunk_pos_center_z + current_view_distance; chunk_z++)
             {
                 if (already_loaded)
                 {
@@ -80,7 +80,7 @@ bool World::load_chunks_around(int x, int y, int z, int view_distance)
     return true;
 }
 
-bool World::change_view_distance(unsigned int view_distance)
+bool World::change_view_distance(int view_distance)
 {
     // (Re)allocate the memory
     if (loaded_chunks != NULL)
