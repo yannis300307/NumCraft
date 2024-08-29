@@ -2,7 +2,7 @@
 
 #define get_local_index(x, y, z) x + y *CHUNK_SIZE + z *CHUNK_SIZE *CHUNK_SIZE
 
-Chunk::Chunk(unsigned int x, unsigned int y, unsigned int z)
+Chunk::Chunk(int x, int y, int z)
 {
     x_pos = x;
     y_pos = y;
@@ -18,6 +18,7 @@ bool Chunk::set_block(uint32_t x, uint32_t y, uint32_t z, block_t type)
 {
     if ((x >= CHUNK_SIZE) || (y >= CHUNK_SIZE) || (z >= CHUNK_SIZE))
         return false;
+    
     blocks[get_local_index(x, y, z)] = type;
     return true;
 }
