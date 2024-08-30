@@ -28,9 +28,12 @@ public:
     /*Give the block type of the block at the given coordinates.*/
     block_t get_block(uint32_t x, uint32_t y, uint32_t z);
 
-    int get_pos_x() {return x_pos;}
-    int get_pos_y() {return y_pos;}
-    int get_pos_z() {return z_pos;}
+    /* Give the x coordiante of the chunk in chunk space*/
+    int get_pos_x() { return x_pos; }
+    /* Give the y coordiante of the chunk in chunk space*/
+    int get_pos_y() { return y_pos; }
+    /* Give the z coordiante of the chunk in chunk space*/
+    int get_pos_z() { return z_pos; }
 };
 
 #endif

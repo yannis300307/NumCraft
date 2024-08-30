@@ -9,6 +9,8 @@ private:
     Core *core;
 public:
     Controls (Core *core);
+
+    /*Handle the keyboard inputs.*/
     void handle(int delta);
 };
 

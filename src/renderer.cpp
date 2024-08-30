@@ -9,7 +9,6 @@
 #define Z_BUFFER_BIT_MAP (S3L_RESOLUTION_X * S3L_RESOLUTION_Y / 8)
 #define S3L_PERSPECTIVE_CORRECTION 1
 
-
 #include "libs/small3dlib.h"
 #include <bitset>
 
@@ -37,38 +36,43 @@ const uint16_t *texture = tilesetTexture;
 const S3L_Index *uvIndices = cubeuvIndices;
 const S3L_Unit *uvs = cubeUvs;
 
+int current_view_distance = 0;
+
 void clear_z_buffer_bit_map()
+/*Clear the the bit map z buffer.*/
 {
-    /*Clear the the bit map z buffer.*/
     z_buffer_bit_map.reset();
 }
 
 void draw_pixel(S3L_PixelInfo *pixel)
+/*Draw the pixel gived by the rasterizer.*/
 {
-    /*Draw the pixel gived by the rasterizer.*/
-
     int index = pixel->x + pixel->y * S3L_RESOLUTION_X;
 
+    // Recover informations about the uvs
     if (pixel->triangleID != previousTriangle)
     {
         S3L_getIndexedTriangleValues(pixel->triangleIndex, uvIndices, uvs, 2, &uv0, &uv1, &uv2);
         previousTriangle = pixel->triangleID;
     }
 
-    if (z_buffer_bit_map.test(index)) return;
+    // Little Z buffer optimisation
+    if (z_buffer_bit_map.test(index))
+        return;
 
+    // Recover the color of the pixel
     S3L_Unit uv[2];
-
     uv[0] = S3L_interpolateBarycentric(uv0.x, uv1.x, uv2.x, pixel->barycentric);
     uv[1] = S3L_interpolateBarycentric(uv0.y, uv1.y, uv2.y, pixel->barycentric);
-
     uint16_t color;
     sampleTexture(texture, uv[0], uv[1], &color);
 
+    // Calculate the triangle row
     uint16_t x = pixel->x;
     uint16_t y = pixel->y;
     uint16_t w = last_pixel_x - pixels_in_row_count + 1;
 
+    // If the triangle row has changed, we push the entire line to the screen
     if (!(y == last_pixel_y && x == last_pixel_x + 1))
     {
         eadk_display_push_rect({w, last_pixel_y, pixels_in_row_count, 1}, row_pixel_buffer);
@@ -82,6 +86,11 @@ void draw_pixel(S3L_PixelInfo *pixel)
 
     // Set the z bit map buffer.
     z_buffer_bit_map.set(index);
+}
+
+bool Renderer::change_view_distance(int view_distance)
+{
+    current_view_distance = view_distance;
 }
 
 Renderer::Renderer()
@@ -104,9 +113,8 @@ Renderer::Renderer()
 }
 
 void fill_void_space(eadk_color_t color)
+/*Fill the screen where triangles are not rendered on the last frame depending of the bit map z buffer.*/
 {
-    /*Fill the screen where triangles are not rendered on the last frame depending of the bit map z buffer.*/
-
     eadk_color_t line[S3L_RESOLUTION_X];
     for (uint16_t x = 0; x < S3L_RESOLUTION_X; x++)
     {

@@ -11,7 +11,7 @@ extern "C"
 
 Controls::Controls(Core *core)
 {
-  this->core = core;
+  this->core = core; // We need access to the core to inject inputs in the components
 }
 
 void Controls::handle(int delta)

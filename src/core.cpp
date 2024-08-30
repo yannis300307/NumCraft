@@ -9,14 +9,12 @@ Core::Core()
 }
 
 void Core::quit()
-/*Free the memory and close the app.*/
 {
     running = false;
     world.free_all_chunks(); // Super important !! Avoid crashes due to memory leaks.
 }
 
 void Core::loop()
-/*The main loop of the program.*/
 {
     uint64_t last_time = eadk_timing_millis(); // Avoid super high delta time
     while (running)

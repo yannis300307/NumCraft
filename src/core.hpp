@@ -15,8 +15,15 @@ private:
 
 public:
     Core();
+
+    /*Free the memory and close the app.*/
     void quit();
+
+    /*The main loop of the program.*/
     void loop();
+
+    // Components
+    
     Renderer renderer;
     Controls controls = Controls(this);
     World world;
