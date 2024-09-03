@@ -16,12 +16,17 @@ using namespace std;
 
 bitset<PIXEL_COUNT> z_buffer_bit_map;
 
+// Temp
 S3L_Unit cubeVertices[] = {S3L_CUBE_VERTICES(S3L_F)};
 S3L_Index cubeTriangles[] = {S3L_CUBE_TRIANGLES};
 S3L_Unit cubeUvs[] = {S3L_CUBE_TEXCOORDS(16)};
 S3L_Index cubeuvIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
 S3L_Model3D cubeModel;
+
+// Setup objects used by S3L
+S3L_Model3D *models = NULL; // Array of the models in the scene dynamically allowed by malloc
+int model_count = 1;
 S3L_Scene scene;
 
 // Used for caching
@@ -90,7 +95,19 @@ void draw_pixel(S3L_PixelInfo *pixel)
 
 bool Renderer::change_view_distance(int view_distance)
 {
+    // Free the memory of the old model array
+    if (models != NULL)
+        free(models);
+    models = (S3L_Model3D *)malloc(view_distance * view_distance * view_distance * sizeof(S3L_Model3D)); // Allocate the space for the chunk models
+
+    if (models == NULL)
+        return false;
+
     current_view_distance = view_distance;
+
+    model_count = view_distance * view_distance * view_distance;
+
+    scene.modelCount = model_count;
 
     return true;
 }
@@ -99,6 +116,7 @@ Renderer::Renderer()
 {
     scene = S3L_Scene();
 
+    // temp
     S3L_model3DInit(
         cubeVertices,
         S3L_CUBE_VERTEX_COUNT,
@@ -106,9 +124,13 @@ Renderer::Renderer()
         S3L_CUBE_TRIANGLE_COUNT,
         &cubeModel);
 
-    S3L_sceneInit(  // Initialize the scene we'll be rendering.
-        &cubeModel, // This is like an array with only one model in it.
-        1,
+    models = (S3L_Model3D *)malloc(sizeof(S3L_Model3D));
+    models[0] = cubeModel;
+
+
+    S3L_sceneInit( // Initialize the scene we'll be rendering.
+        models,
+        model_count,
         &scene);
 
     scene.camera.transform.translation.z = -2 * S3L_F;

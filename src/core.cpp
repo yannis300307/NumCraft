@@ -5,6 +5,8 @@ Core::Core()
 {
     //world.change_view_distance(2);
     //world.load_chunks_around(0, 0, 0);
+    this->update_view_distance(2);
+
     running = true;
 }
 
@@ -29,4 +31,11 @@ void Core::loop()
         controls.handle(delta);
         // eadk_timing_msleep(30);
     }
+}
+
+bool Core::update_view_distance(int view_distance)
+{
+    //if (!world.change_view_distance(view_distance)) return false;
+    //if (!renderer.change_view_distance(view_distance)) return false;
+    return true;
 }

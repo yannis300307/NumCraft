@@ -22,6 +22,9 @@ public:
     /*The main loop of the program.*/
     void loop();
 
+    /*Update the view distance of the componenent. If the view distance is too high and the memory needed to store all the chunks is too high, it return false. Otherways, it returns true.*/
+    bool update_view_distance(int view_distance);
+
     // Components
     
     Renderer renderer;
