@@ -91,6 +91,8 @@ void draw_pixel(S3L_PixelInfo *pixel)
 bool Renderer::change_view_distance(int view_distance)
 {
     current_view_distance = view_distance;
+
+    return true;
 }
 
 Renderer::Renderer()
