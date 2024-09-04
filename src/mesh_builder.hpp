@@ -3,9 +3,8 @@
 
 #include "chunk.hpp"
 
+#include "libs/small3dlib-includes.h"
 
-struct S3L_Model3D;
-
-void build_chunk_mesh(Chunk *chunk, S3L_Model3D *level_model, uint16_t *texture_coordinates);
+void build_chunk_mesh(Chunk *chunk, S3L_Model3D *models);
 
 #endif
