@@ -35,7 +35,7 @@ void Core::loop()
 
 bool Core::update_view_distance(int view_distance)
 {
-    //if (!world.change_view_distance(view_distance)) return false;
-    //if (!renderer.change_view_distance(view_distance)) return false;
+    if (!world.change_view_distance(view_distance)) return false;
+    if (!renderer.change_view_distance(view_distance)) return false;
     return true;
 }
