@@ -3,14 +3,22 @@
 
 #include "chunk.hpp"
 #include <malloc.h>
+#include <list>
+
+struct pos3D
+{
+    int x;
+    int y;
+    int z;
+};
 
 class World
 {
 private:
-    Chunk *loaded_chunks = NULL; // Dynamically allowed with malloc
+    list<Chunk> loaded_chunks;
+    list<pos3D> loaded_chunks_pos;
     unsigned int loaded_chunk_count;
     int current_view_distance = 0;
-    bool *available_chunk_slots; // Used to optimise chunk memory allocation
     bool already_loaded = false;
 
 public:

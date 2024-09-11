@@ -6,10 +6,13 @@ extern "C"
 #include "libs/eadk.h"
 }
 
+class Core;
+
 class Renderer
 {
 private:
   int imageCount = 0;
+  Core *core;
 
 public:
   Renderer();

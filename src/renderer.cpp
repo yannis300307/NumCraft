@@ -1,6 +1,8 @@
 #include "renderer.hpp"
 #include "texture_reader.hpp"
 #include "textures/tileset.h"
+#include "core.hpp"
+
 
 #define S3L_PIXEL_FUNCTION draw_pixel
 #define S3L_RESOLUTION_X 320
@@ -109,6 +111,15 @@ bool Renderer::change_view_distance(int view_distance)
 
     scene.modelCount = model_count;
 
+    for (int i = 0; i < model_count; i++)
+    {
+        S3L_Model3D chunk_model;
+        S3L_model3DInit(0, 0, 0, 0, &chunk_model);
+
+
+        models[i] = chunk_model;
+    }
+
     return true;
 }
 
@@ -126,7 +137,6 @@ Renderer::Renderer()
 
     models = (S3L_Model3D *)malloc(sizeof(S3L_Model3D));
     models[0] = cubeModel;
-
 
     S3L_sceneInit( // Initialize the scene we'll be rendering.
         models,
