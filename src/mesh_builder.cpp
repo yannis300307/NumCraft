@@ -1,6 +1,7 @@
 #include "mesh_builder.hpp"
 #include <malloc.h>
 #include <list>
+#include "list.hpp"
 
 using namespace std;
 
@@ -21,9 +22,11 @@ struct triangle
     int z3;
 };
 
+LIST_CELL(triangle);
+
 void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
 {
-    list<triangle> triangles_list;
+    triangle_list triangles_list;
 
     // Generate the triangles
     for (int x = 0; x < CHUNK_SIZE; x++)
@@ -42,8 +45,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         // check if the block is air
                         chunk->get_block(x, y, z - 1) == 0)
                     {
-                        triangles_list.push_back({x, y, z, x, y + 1, z, x + 1, y + 1, z});
-                        triangles_list.push_back({x, y, z, x + 1, y, z, x + 1, y + 1, z});
+                        push_back(&triangles_list, {x, y, z, x, y + 1, z, x + 1, y + 1, z});
+                        push_back(&triangles_list, {x, y, z, x + 1, y, z, x + 1, y + 1, z});
                     }
 
                     // back
@@ -51,8 +54,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         x < CHUNK_SIZE && y < CHUNK_SIZE && z + 1 < CHUNK_SIZE &&
                         chunk->get_block(x, y, z + 1) == 0)
                     {
-                        triangles_list.push_back({x + 1, y, z + 1, x, y, z + 1, x, y + 1, z + 1});
-                        triangles_list.push_back({x + 1, y, z + 1, x + 1, y + 1, z + 1, x, y + 1, z + 1});
+                        push_back(&triangles_list, {x + 1, y, z + 1, x, y, z + 1, x, y + 1, z + 1});
+                        push_back(&triangles_list, {x + 1, y, z + 1, x + 1, y + 1, z + 1, x, y + 1, z + 1});
                     }
 
                     // top
@@ -60,8 +63,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         x < CHUNK_SIZE && y + 1 < CHUNK_SIZE && z < CHUNK_SIZE &&
                         chunk->get_block(x, y + 1, z) == 0)
                     {
-                        triangles_list.push_back({x, y + 1, z, x, y + 1, z + 1, x + 1, y + 1, z + 1});
-                        triangles_list.push_back({x, y + 1, z, x + 1, y + 1, z, x + 1, y + 1, z + 1});
+                        push_back(&triangles_list, {x, y + 1, z, x, y + 1, z + 1, x + 1, y + 1, z + 1});
+                        push_back(&triangles_list, {x, y + 1, z, x + 1, y + 1, z, x + 1, y + 1, z + 1});
                     }
 
                     // bottom
@@ -69,8 +72,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         x < CHUNK_SIZE && y - 1 < CHUNK_SIZE && z < CHUNK_SIZE &&
                         chunk->get_block(x, y - 1, z) == 0)
                     {
-                        triangles_list.push_back({x, y, z, x, y, z + 1, x + 1, y, z + 1});
-                        triangles_list.push_back({x, y, z, x + 1, y, z, x + 1, y, z + 1});
+                        push_back(&triangles_list, {x, y, z, x, y, z + 1, x + 1, y, z + 1});
+                        push_back(&triangles_list, {x, y, z, x + 1, y, z, x + 1, y, z + 1});
                     }
 
                     // right
@@ -78,8 +81,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE &&
                         chunk->get_block(x, y, z) == 0)
                     {
-                        triangles_list.push_back({x + 1, y, z, x + 1, y + 1, z, x + 1, y + 1, z + 1});
-                        triangles_list.push_back({x + 1, y, z, x + 1, y, z + 1, x + 1, y + 1, z + 1});
+                        push_back(&triangles_list, {x + 1, y, z, x + 1, y + 1, z, x + 1, y + 1, z + 1});
+                        push_back(&triangles_list, {x + 1, y, z, x + 1, y, z + 1, x + 1, y + 1, z + 1});
                     }
 
                     // left
@@ -87,15 +90,15 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
                         x - 1 < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE &&
                         chunk->get_block(x - 1, y, z) == 0)
                     {
-                        triangles_list.push_back({x, y, z + 1, x, y + 1, z + 1, x, y + 1, z});
-                        triangles_list.push_back({x, y, z + 1, x, y, z, x, y + 1, z});
+                        push_back(&triangles_list, {x, y, z + 1, x, y + 1, z + 1, x, y + 1, z});
+                        push_back(&triangles_list, {x, y, z + 1, x, y, z, x, y + 1, z});
                     }
                 }
             }
         }
     }
 
-    int triangle_count = triangles_list.size();
+    int triangle_count = triangles_list.size;
 
     S3L_Unit *verticies = (S3L_Unit *)malloc(triangle_count * 9); // 9 int per triangle
     S3L_Index *triangles = (S3L_Index *)malloc(triangle_count);
