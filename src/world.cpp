@@ -21,7 +21,10 @@ bool World::load_chunks_around(int x, int y, int z)
             for (int chunk_z = chunk_pos_center_z - current_view_distance; chunk_z <= chunk_pos_center_z + current_view_distance; chunk_z++)
             {
                 pos3D chunk_pos = {chunk_x, chunk_y, chunk_z};
-               // if (std::find(loaded_chunks_pos.begin(), loaded_chunks_pos.end(), chunk_pos) == loaded_chunks_pos.end()) {} // TODO : remake the chunk loading
+                if (!contains(&loaded_chunks_pos, &chunk_pos)) {
+                    Chunk new_chunk = Chunk(chunk_x, chunk_y, chunk_z);
+
+                }
                 i++;
             }
         }
