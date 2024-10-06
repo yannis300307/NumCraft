@@ -12,8 +12,13 @@ struct pos3D
     int z;
 };
 
+static inline bool operator==(pos3D a, pos3D b) {
+    return (a.x==b.x && a.y == b.y && a.z == b.z);
+}
+
 LIST_CELL(Chunk);
 LIST_CELL(pos3D);
+LIST_CONTAINS(pos3D);
 
 class World
 {

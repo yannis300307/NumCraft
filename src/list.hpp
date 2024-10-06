@@ -57,8 +57,23 @@
     static inline t pop_front(t##_list *list)                                 \
     {                                                                         \
         t value = list->first->value;                                         \
+        t##_list_cell *old_cell = list->first;                                \
         list->first = list->first->next;                                      \
+        free(old_cell);                                                       \
+        list->size -= 1;                                                      \
         return value;                                                         \
+    }
+
+#define LIST_CONTAINS(t)                                  \
+    static inline bool contains(t##_list *list, t *value) \
+    {                                                     \
+        t##_list_iterator iterator = {list};              \
+        for (int i = 0; i < list->size; i++)              \
+        {                                                 \
+            if (*iterator_next(&iterator) == *value)      \
+                return true;                              \
+        }                                                 \
+        return false;                                     \
     }
 
 #endif

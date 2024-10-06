@@ -21,7 +21,7 @@ src = $(addprefix src/,\
   mesh_builder.cpp,\
 )
 
-CPPFLAGS = -std=c++11 -fno-exceptions
+CPPFLAGS = -std=c++17 -fno-exceptions
 CPPFLAGS += -Os -Wall
 CPPFLAGS += $(shell $(NWLINK) eadk-cflags)
 LDFLAGS = -Wl,--relocatable
