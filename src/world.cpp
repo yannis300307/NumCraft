@@ -21,7 +21,7 @@ bool World::load_chunks_around(int x, int y, int z)
             for (int chunk_z = chunk_pos_center_z - current_view_distance; chunk_z <= chunk_pos_center_z + current_view_distance; chunk_z++)
             {
                 pos3D chunk_pos = {chunk_x, chunk_y, chunk_z};
-                if (std::find(loaded_chunks_pos.begin(), loaded_chunks_pos.end(), chunk_pos) == loaded_chunks_pos.end()) {} // TODO : remake the chunk loading
+               // if (std::find(loaded_chunks_pos.begin(), loaded_chunks_pos.end(), chunk_pos) == loaded_chunks_pos.end()) {} // TODO : remake the chunk loading
                 i++;
             }
         }
@@ -32,7 +32,7 @@ bool World::load_chunks_around(int x, int y, int z)
 
 bool World::change_view_distance(int view_distance)
 {
-    // (Re)allocate the memory
+    /*// (Re)allocate the memory
     if (loaded_chunks != NULL)
         free_all_chunks();
     loaded_chunk_count = view_distance * view_distance * view_distance;
@@ -45,12 +45,12 @@ bool World::change_view_distance(int view_distance)
     available_chunk_slots = (bool *)malloc(loaded_chunk_count);
 
     // Prevent out of memory issues
-    return loaded_chunks != NULL && available_chunk_slots != NULL; // If loaded_chunks is equal to NULL, we are running out of memory!
+    return loaded_chunks != NULL && available_chunk_slots != NULL; // If loaded_chunks is equal to NULL, we are running out of memory!*/
 }
 
 
 
 void World::free_all_chunks()
 {
-    free(loaded_chunks);
+    //free(loaded_chunks);
 }

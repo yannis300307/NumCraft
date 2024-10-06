@@ -105,8 +105,7 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
 
     for (int i = 0; i < triangle_count; i++)
     {
-        triangle current_triangle = triangles_list.front();
-        triangles_list.pop_front();
+        triangle current_triangle = pop_front(&triangles_list);
 
         verticies[i * 9] = current_triangle.x1;
         verticies[i * 9 + 1] = current_triangle.y1;

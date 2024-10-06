@@ -3,7 +3,7 @@
 
 #include "chunk.hpp"
 #include <malloc.h>
-#include <list>
+#include "list.hpp"
 
 struct pos3D
 {
@@ -12,11 +12,14 @@ struct pos3D
     int z;
 };
 
+LIST_CELL(Chunk);
+LIST_CELL(pos3D);
+
 class World
 {
 private:
-    list<Chunk> loaded_chunks;
-    list<pos3D> loaded_chunks_pos;
+    Chunk_list loaded_chunks;
+    pos3D_list loaded_chunks_pos;
     unsigned int loaded_chunk_count;
     int current_view_distance = 0;
     bool already_loaded = false;

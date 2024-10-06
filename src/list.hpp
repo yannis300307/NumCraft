@@ -1,3 +1,6 @@
+#ifndef LIST_HPP
+#define LIST_HPP
+
 #include <malloc.h>
 
 #define LIST_CELL(t)                                                          \
@@ -10,9 +13,9 @@
     {                                                                         \
         t##_list_cell *last = NULL;                                           \
         t##_list_cell *first = NULL;                                          \
-        size_t size = 0;                                                      \
+        int size = 0;                                                         \
     };                                                                        \
-    bool push_back(t##_list *list, t value)                                   \
+    static inline bool push_back(t##_list *list, t value)                     \
     {                                                                         \
         t##_list_cell *cell = (t##_list_cell *)malloc(sizeof(t##_list_cell)); \
         if (cell == NULL)                                                     \
@@ -36,7 +39,7 @@
         int cursor = 0;                                                       \
         t##_list_cell *current = list->first;                                 \
     };                                                                        \
-    t *iterator_next(t##_list_iterator *iterator)                             \
+    static inline t *iterator_next(t##_list_iterator *iterator)               \
     {                                                                         \
         if (iterator->cursor >= iterator->list->size)                         \
             return NULL;                                                      \
@@ -44,4 +47,18 @@
         iterator->current = iterator->current->next;                          \
         iterator->cursor += 1;                                                \
         return &(current->value);                                             \
+    }                                                                         \
+    static inline t *front(t##_list *list)                                    \
+    {                                                                         \
+        if (list->first == NULL)                                              \
+            return NULL;                                                      \
+        return &(list->first->value);                                         \
+    }                                                                         \
+    static inline t pop_front(t##_list *list)                                 \
+    {                                                                         \
+        t value = list->first->value;                                         \
+        list->first = list->first->next;                                      \
+        return value;                                                         \
     }
+
+#endif
