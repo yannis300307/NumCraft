@@ -3,13 +3,13 @@
 #include "textures/tileset.h"
 #include "core.hpp"
 
-
 #define S3L_PIXEL_FUNCTION draw_pixel
 #define S3L_RESOLUTION_X 320
 #define S3L_RESOLUTION_Y 240
 #define PIXEL_COUNT (S3L_RESOLUTION_X * S3L_RESOLUTION_Y)
 #define Z_BUFFER_BIT_MAP (S3L_RESOLUTION_X * S3L_RESOLUTION_Y / 8)
 #define S3L_PERSPECTIVE_CORRECTION 1
+#define S3L_SORT 1
 
 #include "libs/small3dlib.h"
 #include <bitset>
@@ -25,6 +25,13 @@ S3L_Unit cubeUvs[] = {S3L_CUBE_TEXCOORDS(16)};
 S3L_Index cubeuvIndices[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
 S3L_Model3D cubeModel;
+
+S3L_Unit cubeVertices2[] = {512 + 512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + 512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + -512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + 512 / 2, 512 + 512 / 2, 512 + 512 / 2, 512 + -512 / 2, 512 + 512 / 2, 512 + 512 / 2};
+S3L_Index cubeTriangles2[] = {S3L_CUBE_TRIANGLES};
+S3L_Unit cubeUvs2[] = {S3L_CUBE_TEXCOORDS(16)};
+S3L_Index cubeuvIndices2[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+
+S3L_Model3D cubeModel2;
 
 // Setup objects used by S3L
 S3L_Model3D *models = NULL; // Array of the models in the scene dynamically allowed by malloc
@@ -63,10 +70,6 @@ void draw_pixel(S3L_PixelInfo *pixel)
         previousTriangle = pixel->triangleID;
     }
 
-    // Little Z buffer optimisation
-    if (z_buffer_bit_map.test(index))
-        return;
-
     // Recover the color of the pixel
     S3L_Unit uv[2];
     uv[0] = S3L_interpolateBarycentric(uv0.x, uv1.x, uv2.x, pixel->barycentric);
@@ -92,7 +95,8 @@ void draw_pixel(S3L_PixelInfo *pixel)
     pixels_in_row_count += 1;
 
     // Set the z bit map buffer.
-    z_buffer_bit_map.set(index);
+    if (!z_buffer_bit_map.test(index))
+        z_buffer_bit_map.set(index);
 }
 
 bool Renderer::change_view_distance(int view_distance)
@@ -116,7 +120,6 @@ bool Renderer::change_view_distance(int view_distance)
         S3L_Model3D chunk_model;
         S3L_model3DInit(0, 0, 0, 0, &chunk_model);
 
-
         models[i] = chunk_model;
     }
 
@@ -137,6 +140,8 @@ Renderer::Renderer()
 
     models = (S3L_Model3D *)malloc(sizeof(S3L_Model3D));
     models[0] = cubeModel;
+
+    model_count = 1;
 
     S3L_sceneInit( // Initialize the scene we'll be rendering.
         models,
@@ -233,6 +238,34 @@ void Renderer::update()
     scene.models[0].transform.rotation.x += 4;
     scene.models[0].transform.translation.x = S3L_sin(imageCount * 4);
     scene.models[0].transform.translation.y = S3L_sin(imageCount * 2) / 2;*/
+
+    if (imageCount == 500)
+    {
+        S3L_model3DInit(
+            cubeVertices2,
+            S3L_CUBE_VERTEX_COUNT,
+            cubeTriangles2,
+            S3L_CUBE_TRIANGLE_COUNT,
+            &cubeModel2);
+
+        S3L_model3DInit(
+            cubeVertices,
+            S3L_CUBE_VERTEX_COUNT,
+            cubeTriangles,
+            S3L_CUBE_TRIANGLE_COUNT,
+            &cubeModel);
+
+        models = (S3L_Model3D *)malloc(sizeof(S3L_Model3D) * 2);
+        models[0] = cubeModel;
+        models[1] = cubeModel2;
+
+        model_count = 2;
+
+        S3L_sceneInit( // Initialize the scene we'll be rendering.
+            models,
+            model_count,
+            &scene);
+    }
 
     eadk_display_wait_for_vblank();
 
