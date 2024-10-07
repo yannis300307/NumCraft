@@ -62,6 +62,37 @@
         free(old_cell);                                                       \
         list->size -= 1;                                                      \
         return value;                                                         \
+    }                                                                         \
+    static inline t get_index(t##_list *list, unsigned int index)             \
+    {                                                                         \
+        t##_list_cell *cell = list->first;                                    \
+        for (int i = 0; i < index; i++)                                       \
+        {                                                                     \
+            cell = cell->next;                                                \
+        }                                                                     \
+        return cell->value;                                                   \
+    }                                                                         \
+    static inline t pop(t##_list *list, unsigned int index)                   \
+    {                                                                         \
+        t##_list_cell *cell = list->first;                                    \
+        t##_list_cell *previous_cell = NULL;                                  \
+        for (int i = 0; i < index; i++)                                       \
+        {                                                                     \
+            previous_cell = cell;                                             \
+            cell = cell->next;                                                \
+        }                                                                     \
+        previous_cell->next = cell->next;                                     \
+        t value = cell->value;                                                \
+        free(cell);                                                           \
+        list->size -= 1;                                                      \
+        return value;                                                         \
+    }                                                                         \
+    static inline void clear(t##_list *list)                                  \
+    {                                                                         \
+        for (int i = 0; i < list->size; i++)                                  \
+        {                                                                     \
+            pop_front(list);                                                  \
+        }                                                                     \
     }
 
 #define LIST_CONTAINS(t)                                  \
