@@ -63,7 +63,7 @@
         list->size -= 1;                                                      \
         return value;                                                         \
     }                                                                         \
-    static inline t get_index(t##_list *list, unsigned int index)             \
+    static inline t get_index(t##_list *list, int index)                      \
     {                                                                         \
         t##_list_cell *cell = list->first;                                    \
         for (int i = 0; i < index; i++)                                       \
@@ -72,7 +72,7 @@
         }                                                                     \
         return cell->value;                                                   \
     }                                                                         \
-    static inline t pop(t##_list *list, unsigned int index)                   \
+    static inline t pop(t##_list *list, int index)                            \
     {                                                                         \
         t##_list_cell *cell = list->first;                                    \
         t##_list_cell *previous_cell = NULL;                                  \

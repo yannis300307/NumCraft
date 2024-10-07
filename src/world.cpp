@@ -21,7 +21,7 @@ bool World::load_chunks_around(int x, int y, int z)
             {
                 pos3D chunk_pos = {chunk_x, chunk_y, chunk_z};
 
-                push_back(in_distance, chunk_pos);
+                push_back(&in_distance, chunk_pos);
             }
         }
     }
@@ -29,25 +29,31 @@ bool World::load_chunks_around(int x, int y, int z)
     pos3D_list_iterator it = {&loaded_chunks_pos};
     for (int i = 0; i < loaded_chunks_pos.size; i++)
     {
-        pos3D pos = iterator_next(it);
+        pos3D *pos = iterator_next(&it);
 
-        if (!contains(&in_distance, pos)) {
+        if (!contains(&in_distance, pos))
+        {
             pop(&loaded_chunks, i);
             i--;
         }
     }
 
-    pos3D_list_iterator it = {&in_distance};
-    for (int i = 0; i < in_distance.size; i++) {
-        pos3D pos = iterator_next(it);
-        if (!contains(&loaded_chunks_pos, pos)) {
-            Chunk new_chunck = Chunk(pos.x, pos.y, pos.z);
+    it = {&in_distance};
+    for (int i = 0; i < in_distance.size; i++)
+    {
+        pos3D *pos = iterator_next(&it);
+        if (!contains(&loaded_chunks_pos, pos))
+        {
+            Chunk new_chunck = Chunk(pos->x, pos->y, pos->z);
 
             push_back(&loaded_chunks, new_chunck);
+        }
     }
 
-    pos3D_list old_poses = loaded_chunks_pos;
-    loaded_chunk_count = in_distance;
+    pos3D_list *old_poses = &loaded_chunks_pos;
+    loaded_chunks_pos = in_distance;
+
+    clear(old_poses);
 
     return true;
 }
@@ -68,6 +74,7 @@ bool World::change_view_distance(int view_distance)
 
     // Prevent out of memory issues
     return loaded_chunks != NULL && available_chunk_slots != NULL; // If loaded_chunks is equal to NULL, we are running out of memory!*/
+    return true;
 }
 
 void World::free_all_chunks()
