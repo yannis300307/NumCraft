@@ -9,7 +9,7 @@
 #define PIXEL_COUNT (S3L_RESOLUTION_X * S3L_RESOLUTION_Y)
 #define Z_BUFFER_BIT_MAP (S3L_RESOLUTION_X * S3L_RESOLUTION_Y / 8)
 #define S3L_PERSPECTIVE_CORRECTION 1
-#define S3L_SORT 1
+#define S3L_SORT 2
 
 #include "libs/small3dlib.h"
 #include <bitset>
@@ -70,6 +70,9 @@ void draw_pixel(S3L_PixelInfo *pixel)
         previousTriangle = pixel->triangleID;
     }
 
+    if (z_buffer_bit_map.test(index))
+        return;
+
     // Recover the color of the pixel
     S3L_Unit uv[2];
     uv[0] = S3L_interpolateBarycentric(uv0.x, uv1.x, uv2.x, pixel->barycentric);
@@ -95,8 +98,7 @@ void draw_pixel(S3L_PixelInfo *pixel)
     pixels_in_row_count += 1;
 
     // Set the z bit map buffer.
-    if (!z_buffer_bit_map.test(index))
-        z_buffer_bit_map.set(index);
+    z_buffer_bit_map.set(index);
 }
 
 bool Renderer::change_view_distance(int view_distance)
