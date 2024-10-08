@@ -2,6 +2,8 @@
 #include <malloc.h>
 #include <list>
 #include "list.hpp"
+#include "libs/small3dlib-includes.h"
+
 
 using namespace std;
 
@@ -103,19 +105,19 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
     {
         triangle current_triangle = pop_front(&triangles_list);
 
-        verticies[i * 9] = current_triangle.x1;
-        verticies[i * 9 + 1] = current_triangle.y1;
-        verticies[i * 9 + 2] = current_triangle.z1;
+        verticies[i * 9] = chunk->get_pos_x()*CHUNK_SIZE + current_triangle.x1;
+        verticies[i * 9 + 1] = chunk->get_pos_y()*CHUNK_SIZE + current_triangle.y1;
+        verticies[i * 9 + 2] = chunk->get_pos_z()*CHUNK_SIZE + current_triangle.z1;
         triangles[i * 3] = i * 3;
 
-        verticies[i * 9 + 3] = current_triangle.x2;
-        verticies[i * 9 + 4] = current_triangle.y2;
-        verticies[i * 9 + 5] = current_triangle.z2;
+        verticies[i * 9 + 3] = chunk->get_pos_x()*CHUNK_SIZE + current_triangle.x2;
+        verticies[i * 9 + 4] = chunk->get_pos_y()*CHUNK_SIZE + current_triangle.y2;
+        verticies[i * 9 + 5] = chunk->get_pos_z()*CHUNK_SIZE + current_triangle.z2;
         triangles[i * 3 + 1] = i * 3 + 1;
 
-        verticies[i * 9 + 6] = current_triangle.x3;
-        verticies[i * 9 + 7] = current_triangle.y3;
-        verticies[i * 9 + 8] = current_triangle.z3;
+        verticies[i * 9 + 6] = chunk->get_pos_x()*CHUNK_SIZE + current_triangle.x3;
+        verticies[i * 9 + 7] = chunk->get_pos_y()*CHUNK_SIZE + current_triangle.y3;
+        verticies[i * 9 + 8] = chunk->get_pos_z()*CHUNK_SIZE + current_triangle.z3;
         triangles[i * 3 + 2] = i * 3 + 2;
     }
 

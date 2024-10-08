@@ -12,8 +12,9 @@ struct pos3D
     int z;
 };
 
-static inline bool operator==(pos3D a, pos3D b) {
-    return (a.x==b.x && a.y == b.y && a.z == b.z);
+static inline bool operator==(pos3D a, pos3D b)
+{
+    return (a.x == b.x && a.y == b.y && a.z == b.z);
 }
 
 LIST_CELL(Chunk);
@@ -38,6 +39,9 @@ public:
 
     /*Free the loaded chunks to avoid memory leaks.*/
     void free_all_chunks();
+
+    /*Return a pointer to the list of the loaded chunks.*/
+    Chunk_list *get_loaded_chunks() { return &loaded_chunks; }
 };
 
 #endif

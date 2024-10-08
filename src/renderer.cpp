@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 #include "texture_reader.hpp"
 #include "textures/tileset.h"
+#include "mesh_builder.hpp"
 #include "core.hpp"
 
 #define S3L_PIXEL_FUNCTION draw_pixel
@@ -117,10 +118,14 @@ bool Renderer::change_view_distance(int view_distance)
 
     scene.modelCount = model_count;
 
+    Chunk_list * chunks_list = core->world.get_loaded_chunks();
+    Chunk_list_iterator it = {chunks_list};
     for (int i = 0; i < model_count; i++)
     {
         S3L_Model3D chunk_model;
         S3L_model3DInit(0, 0, 0, 0, &chunk_model);
+
+        build_chunk_mesh(iterator_next(&it), &chunk_model);
 
         models[i] = chunk_model;
     }

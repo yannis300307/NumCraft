@@ -3,7 +3,7 @@
 
 #include "chunk.hpp"
 
-#include "libs/small3dlib-includes.h"
+typedef struct S3L_Model3D S3L_Model3D;
 
 void build_chunk_mesh(Chunk *chunk, S3L_Model3D *models);
 
