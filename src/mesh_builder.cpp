@@ -5,10 +5,6 @@
 
 using namespace std;
 
-void gen_block_mesh(int x, int y, int z, S3L_Model3D &level_model)
-{
-}
-
 struct triangle
 {
     int x1;
@@ -127,4 +123,6 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
     model->triangleCount = triangle_count;
     model->vertexCount = triangle_count * 9;
     model->vertices = verticies;
+
+    clear(&triangles_list);
 }
