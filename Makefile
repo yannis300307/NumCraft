@@ -18,7 +18,6 @@ src = $(addprefix src/,\
   texture_reader.cpp,\
   chunk.cpp,\
   world.cpp,\
-  mesh_builder.cpp,\
 )
 
 CPPFLAGS = -std=c++20 -fno-exceptions
