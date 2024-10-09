@@ -5,7 +5,7 @@ Core::Core()
 {
     //world.change_view_distance(2);
     //world.load_chunks_around(0, 0, 0);
-    this->update_view_distance(2);
+    this->update_view_distance(1);
 
     running = true;
 }

@@ -121,15 +121,27 @@ bool Renderer::change_view_distance(int view_distance)
 
     Chunk_list * chunks_list = core->world.get_loaded_chunks();
     Chunk_list_iterator it = {chunks_list};
+
+    
     for (int i = 0; i < model_count; i++)
     {
         S3L_Model3D chunk_model;
+        
         S3L_model3DInit(0, 0, 0, 0, &chunk_model);
 
-        build_chunk_mesh(iterator_next(&it), &chunk_model);
+        Chunk *current_chunk = iterator_next(&it);
+
+        build_chunk_mesh(current_chunk, &chunk_model);
+
+        continue;
 
         models[i] = chunk_model;
     }
+
+    S3L_sceneInit( // Initialize the scene we'll be rendering.
+            models,
+            model_count,
+            &scene);
 
     return true;
 }
@@ -247,32 +259,13 @@ void Renderer::update()
     scene.models[0].transform.translation.x = S3L_sin(imageCount * 4);
     scene.models[0].transform.translation.y = S3L_sin(imageCount * 2) / 2;*/
 
-    if (imageCount == 500)
+    if (imageCount == 100)
     {
-        S3L_model3DInit(
-            cubeVertices2,
-            S3L_CUBE_VERTEX_COUNT,
-            cubeTriangles2,
-            S3L_CUBE_TRIANGLE_COUNT,
-            &cubeModel2);
-
-        S3L_model3DInit(
-            cubeVertices,
-            S3L_CUBE_VERTEX_COUNT,
-            cubeTriangles,
-            S3L_CUBE_TRIANGLE_COUNT,
-            &cubeModel);
-
-        models = (S3L_Model3D *)malloc(sizeof(S3L_Model3D) * 2);
-        models[0] = cubeModel;
-        models[1] = cubeModel2;
-
-        model_count = 2;
-
-        S3L_sceneInit( // Initialize the scene we'll be rendering.
-            models,
-            model_count,
-            &scene);
+        eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_red);
+        eadk_timing_msleep(2000);
+        change_view_distance(1);
+        eadk_display_push_rect_uniform(eadk_screen_rect, eadk_color_blue);
+        eadk_timing_msleep(2000);
     }
 
     eadk_display_wait_for_vblank();
@@ -299,6 +292,8 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
 {
     triangle_list triangles_list;
 
+    // THERE IS AN ERROR IN THE FOLLOWING CODE THAT MAKE THE APP INSTANT CRASH AT LAUNCH
+    /*
     // Generate the triangles
     for (int x = 0; x < CHUNK_SIZE; x++)
     {
@@ -368,7 +363,7 @@ void build_chunk_mesh(Chunk *chunk, S3L_Model3D *model)
             }
         }
     }
-
+    */
     int triangle_count = triangles_list.size;
 
     S3L_Unit *verticies = (S3L_Unit *)malloc(triangle_count * 9); // 9 int per triangle
